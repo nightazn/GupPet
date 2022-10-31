@@ -1,0 +1,28 @@
+## Interface: 100000
+## Title: GupPet
+## Author: Gup(before 6.0), FlyNeko (before 8.0), grimmtooth
+## Version: 10.0.0
+## Notes: 
+## DefaultState: Enabled
+## LoadOnDemand: 0
+## SavedVariablesPerCharacter: GUPPET_SAVEDDATA, GUPPET_SAVEDLOCATIONS, GUPPET_OPTIONS 
+
+Libs\LibPetJournal-2.0\LibStub.lua
+Libs\LibPetJournal-2.0\CallbackHandler-1.0.lua
+Libs\LibPetJournal-2.0\LibPetJournal-2.0.lua
+
+localization.lua
+
+GupPet_Interface_IngameButtons.xml
+GupPet_Interface.lua
+GupPet_Interface_IngameButtons.lua 
+
+Gup_MountData.lua
+GupPet_Data.lua
+
+GupP_Mount.lua
+GupPet_Companion.lua
+GupPet_AutoCompanion.lua
+
+GupPet.lua
+GupPet.xml

@@ -1,0 +1,30 @@
+<Bindings>
+
+	<!-- Hooked to the ingamebuttons -->
+	<Binding category="ADDONS" name="GUPPET_AUTO" header="GUPPET">
+		GupPet_AutoMounten()
+	</Binding>
+	<Binding category="ADDONS" name="GUPPET_AUTOGROUND" >
+		GupPet_AutoGround()
+	</Binding>
+	<Binding category="ADDONS" name="GUPPET_AUTOFLY">
+		GupPet_AutoFly()
+	</Binding>
+	<Binding category="ADDONS" name="GUPPET_CALLCOMPANION">
+		GupPet_PreCallCompanion()
+	</Binding>
+
+	<!-- Normal bindings -->
+	<Binding category="ADDONS" name="GUPPET_AQUATICMOUNT" >
+		GupPet_PreMounten( "Aquatic" )
+	</Binding>
+	<Binding category="ADDONS" name="GUPPET_MULTIGROUNDMOUNT" >
+		GupPet_PreMounten( "Multi" )
+	</Binding>
+
+
+
+</Bindings>
+
+
+

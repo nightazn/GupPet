@@ -1,0 +1,282 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"   xsi:schemaLocation="http://www.blizzard.com/wow/ui/">
+
+	<Button name="GupPet_IngameButtonTemplate" inherits="SecureActionButtonTemplate" virtual="true">
+		<Attributes>
+			<Attribute name="type" type="string" value="macro"/>
+			<Attribute name="shift-type1" type="string" value="macro"/>
+			<Attribute name="alt-type1" type="string" value="macro"/>
+			<Attribute name="type2" type="string" value="macro"/>
+		</Attributes>
+		<Size>
+			<AbsDimension x="30" y="30"/>
+		</Size>
+		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture name="$parentIcon"/>
+			</Layer>
+			<Layer level="ARTWORK">
+				<FontString name="$parentHotKey" inherits="NumberFontNormalSmallGray" justifyH="RIGHT">
+					<Size>
+						<AbsDimension x="36" y="10"/>
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset>
+								<AbsDimension x="-2" y="-2"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Frames>
+			<Cooldown name="$parentCooldown" inherits="CooldownFrameTemplate">
+				<Size x="36" y="36"/>
+				<Anchors>
+					<Anchor point="CENTER">
+						<Offset>
+							<AbsDimension x="0" y="-1"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+			</Cooldown>
+		</Frames>
+		<NormalTexture name="$parentNormalTexture" file="Interface\Buttons\UI-Quickslot2">
+			<Size>
+				<AbsDimension x="54" y="54"/>
+			</Size>
+			<Anchors>
+				<Anchor point="CENTER">
+					<Offset>
+						<AbsDimension x="0" y="-1"/>
+					</Offset>
+				</Anchor>
+			</Anchors>
+		</NormalTexture>
+		<PushedTexture file="Interface\Buttons\UI-Quickslot-Depress"/>
+<!-- 
+		TODO: Fix. Maybe Deprecated?
+		<HighlightTexture alphaMode="ADD" file="Interface\Buttons\ButtonHilight-Square" />
+		<CheckedTexture alphaMode="ADD" file="Interface\Buttons\CheckButtonHilight" />
+-->
+		<Scripts>
+			<OnEnter>
+				if ( self.tooltipText ) then
+					GameTooltip:SetOwner(self, self.tooltipOwnerPoint or "ANCHOR_RIGHT")
+					GameTooltip:SetText(self.tooltipText, nil, nil, nil, nil, true)
+				end
+				if ( self.tooltipRequirement ) then
+					GameTooltip:AddLine(self.tooltipRequirement, 1.0, 1.0, 1.0, true)
+					GameTooltip:Show()
+				end
+				if ( self.tooltipRequirementTwo ) then
+					GameTooltip:AddLine(self.tooltipRequirementTwo, 1.0, 1.0, 1.0, true)
+					GameTooltip:Show()
+				end
+			</OnEnter>
+			<OnLeave>
+				GameTooltip:Hide()
+			</OnLeave>
+		</Scripts>
+	</Button>
+
+
+
+
+	<Frame name="GupPet_IngameFrameTemplate" virtual="true">
+		<Frames>
+			<!-- GROUND BUTTON -->
+			<Button name="$parentGround" inherits="GupPet_IngameButtonTemplate">
+				<Scripts>
+					<OnLoad>
+						self:SetScript("PreClick", function (self, button, down) GupPet_Interface_BuildMacro( self, "GROUND" ); end)
+						self.tooltipText = GUPPET_L["INGAMEBUTTONS_GROUND"][1]
+						self.tooltipRequirement = GUPPET_L["INGAMEBUTTONS_GROUND"][2]
+						_G[ self:GetName() .. "Icon"]:SetTexture("Interface\\Icons\\Ability_Mount_Mammoth_Black.blp") ; -- GroundMount
+
+						if GUPPET_TEMPCLASSDATA.Type == "DRUID" or GUPPET_TEMPCLASSDATA.Type == "SHAMAN" then
+							self.tooltipRequirementTwo = GUPPET_L["INGAMEBUTTONS_AUTO"][3]
+						end
+					</OnLoad>
+				</Scripts>
+			</Button>
+
+			<!-- FLY BUTTON -->
+			<Button name="$parentFly" inherits="GupPet_IngameButtonTemplate">
+				<Scripts>
+					<OnLoad>
+						self:SetScript("PreClick", function (self, button, down) GupPet_Interface_BuildMacro( self, "FLY" ); end)
+						self.tooltipText = GUPPET_L["INGAMEBUTTONS_FLY"][1]
+						self.tooltipRequirement = GUPPET_L["INGAMEBUTTONS_FLY"][2]
+						_G[ self:GetName() .. "Icon"]:SetTexture("Interface\\Icons\\Ability_Mount_Drake_Bronze.blp") ; -- FlyMount
+					</OnLoad>
+				</Scripts>
+			</Button>
+
+			<!-- AUTO BUTTON -->
+			<Button name="$parentAuto" inherits="GupPet_IngameButtonTemplate" >
+				<Scripts>
+					<OnLoad>
+						self:SetScript("PreClick", function (self, button, down) GupPet_Interface_BuildMacro( self, "AUTO" ); end)
+						self.tooltipText = GUPPET_L["INGAMEBUTTONS_AUTO"][1]
+						self.tooltipRequirement = GUPPET_L["INGAMEBUTTONS_AUTO"][2]
+						_G[ self:GetName() .. "Icon"]:SetTexture("Interface\\Icons\\Ability_Mount_Drake_Azure.blp")
+
+						if GUPPET_TEMPCLASSDATA.Type == "DRUID" or GUPPET_TEMPCLASSDATA.Type == "SHAMAN" then
+							self.tooltipRequirementTwo = GUPPET_L["INGAMEBUTTONS_AUTO"][3]
+						end
+					</OnLoad>
+				</Scripts>
+			</Button>
+
+			<!-- COMPANION BUTTON -->
+			<Button name="$parentCompanion" inherits="GupPet_IngameButtonTemplate">
+				<Scripts>
+					<OnLoad>
+
+						self:SetAttribute("macrotext"		, "/script GupPet_PreCallCompanion()" )
+						self:SetAttribute("shift-macrotext1", "/script if C_PetJournal.GetSummonedPetGUID() then C_PetJournal.SummonPetByGUID(C_PetJournal.GetSummonedPetGUID()) end" )
+						self:SetAttribute("alt-macrotext1"	, "/script GupPet_PreCallCompanion()" )
+
+						-- Undocumented but works ;)
+						self:SetAttribute("macrotext2"		, "/script if C_PetJournal.GetSummonedPetGUID() then C_PetJournal.SummonPetByGUID(C_PetJournal.GetSummonedPetGUID()) end" )
+
+
+						self.tooltipText = GUPPET_L["INGAMEBUTTONS_COMPANION"][1]
+						self.tooltipRequirement = GUPPET_L["INGAMEBUTTONS_COMPANION"][2]
+						_G[self:GetName() .. "Icon"]:SetTexture("Interface\\Icons\\INV_Box_PetCarrier_01.blp")
+
+						self:RegisterForClicks("LeftButtonUp","RightButtonUp","MiddleButtonUp")
+
+					</OnLoad>
+				</Scripts>
+			</Button>
+
+			<!-- MOVE BUTTONS -->
+			<Button name="$parentMoveTopLeft" inherits="UIPanelButtonTemplate" text="">
+				<Size><AbsDimension x="10" y="10"/></Size>
+				<Anchors><Anchor point="TOPLEFT"><Offset x="-10" y="10"/></Anchor></Anchors>
+				<Scripts>
+					<OnMouseDown> 	if button == "LeftButton" then GupPet_Interface_DragIngameButtons( "Start" ) end </OnMouseDown>
+					<OnMouseUp>   	if button == "LeftButton" then GupPet_Interface_DragIngameButtons( "Stop" )  end </OnMouseUp>
+					<OnLoad>
+						self:RegisterForClicks("LeftButtonUp", "RightButtonUp")
+						self.tooltipText = GUPPET_L["INGAMEBUTTONS_MOVE"][1]
+						self.tooltipRequirement = GUPPET_L["INGAMEBUTTONS_MOVE"][2]
+					</OnLoad>
+					<OnClick>
+						--GupPet_Interface_DragIngameButtons( "Hide" )
+						--GUPPET_OPTIONS["IngameButton"]["Lock"] = true
+						GUPPET_INTERFACE_OPTIONFRAME.UIDrag:SetChecked(  GUPPET_OPTIONS["IngameButton"]["Lock"] )
+					</OnClick>
+					<OnEnter>
+						if ( self.tooltipText ) then
+							GameTooltip:SetOwner(self, self.tooltipOwnerPoint or "ANCHOR_RIGHT")
+							GameTooltip:SetText(self.tooltipText, nil, nil, nil, nil, true)
+						end
+						if ( self.tooltipRequirement ) then
+							GameTooltip:AddLine(self.tooltipRequirement, 1.0, 1.0, 1.0, true)
+							GameTooltip:Show()
+						end
+					</OnEnter>
+					<OnLeave>
+						GameTooltip:Hide()
+					</OnLeave>
+				</Scripts>
+ 			</Button>
+			<Button name="$parentMoveTopRight" inherits="UIPanelButtonTemplate" text="">
+				<Size><AbsDimension x="10" y="10"/></Size>
+				<Anchors><Anchor point="TOPRIGHT"><Offset x="10" y="10"/></Anchor></Anchors>
+				<Scripts>
+					<OnMouseDown> 	if button == "LeftButton" then GupPet_Interface_DragIngameButtons( "Start" ) end </OnMouseDown>
+					<OnMouseUp> 	if button == "LeftButton" then GupPet_Interface_DragIngameButtons( "Stop" )  end </OnMouseUp>
+					<OnLoad>
+						self:RegisterForClicks("RightButtonUp")
+						self.tooltipText = GUPPET_L["INGAMEBUTTONS_MOVE"][1]
+						self.tooltipRequirement = GUPPET_L["INGAMEBUTTONS_MOVE"][2]
+					</OnLoad>
+					 <OnClick>
+						GupPet_Interface_DragIngameButtons( "Hide" )
+						GUPPET_OPTIONS["IngameButton"]["Lock"] = true
+						GUPPET_INTERFACE_OPTIONFRAME.UIDrag:SetChecked(  GUPPET_OPTIONS["IngameButton"]["Lock"] )
+					</OnClick>
+					<OnEnter>
+						if ( self.tooltipText ) then
+							GameTooltip:SetOwner(self, self.tooltipOwnerPoint or "ANCHOR_RIGHT")
+							GameTooltip:SetText(self.tooltipText, nil, nil, nil, nil, true)
+						end
+						if ( self.tooltipRequirement ) then
+							GameTooltip:AddLine(self.tooltipRequirement, 1.0, 1.0, 1.0, true)
+							GameTooltip:Show()
+						end
+					</OnEnter>
+					<OnLeave>
+						GameTooltip:Hide()
+					</OnLeave>
+				</Scripts>
+ 			</Button>
+			<Button name="$parentMoveBottomLeft" inherits="UIPanelButtonTemplate" text="">
+				<Size><AbsDimension x="10" y="10"/></Size>
+				<Anchors><Anchor point="BOTTOMLEFT"><Offset x="-10" y="-10"/></Anchor></Anchors>
+				<Scripts>
+					<OnMouseDown> 	if button == "LeftButton" then GupPet_Interface_DragIngameButtons( "Start" ) end </OnMouseDown>
+					<OnMouseUp> 	if button == "LeftButton" then GupPet_Interface_DragIngameButtons( "Stop" )  end </OnMouseUp>
+					<OnLoad>
+						self:RegisterForClicks("RightButtonUp")
+						self.tooltipText = GUPPET_L["INGAMEBUTTONS_MOVE"][1]
+						self.tooltipRequirement = GUPPET_L["INGAMEBUTTONS_MOVE"][2]
+					</OnLoad>
+					 <OnClick>
+						GupPet_Interface_DragIngameButtons( "Hide" )
+						GUPPET_OPTIONS["IngameButton"]["Lock"] = true
+						GUPPET_INTERFACE_OPTIONFRAME.UIDrag:SetChecked(  GUPPET_OPTIONS["IngameButton"]["Lock"] )
+					</OnClick>
+					<OnEnter>
+						if ( self.tooltipText ) then
+							GameTooltip:SetOwner(self, self.tooltipOwnerPoint or "ANCHOR_RIGHT")
+							GameTooltip:SetText(self.tooltipText, nil, nil, nil, nil, true)
+						end
+						if ( self.tooltipRequirement ) then
+							GameTooltip:AddLine(self.tooltipRequirement, 1.0, 1.0, 1.0, true)
+							GameTooltip:Show()
+						end
+					</OnEnter>
+					<OnLeave>
+						GameTooltip:Hide()
+					</OnLeave>
+				</Scripts>
+ 			</Button>
+			<Button name="$parentMoveBottomRight" inherits="UIPanelButtonTemplate" text="">
+				<Size><AbsDimension x="10" y="10"/></Size>
+				<Anchors><Anchor point="BOTTOMRIGHT"><Offset x="10" y="-10"/></Anchor></Anchors>
+				<Scripts>
+					<OnMouseDown> 	if button == "LeftButton" then GupPet_Interface_DragIngameButtons( "Start" ) end </OnMouseDown>
+					<OnMouseUp> 	if button == "LeftButton" then GupPet_Interface_DragIngameButtons( "Stop" )  end </OnMouseUp>
+					<OnLoad>
+						self:RegisterForClicks("RightButtonUp")
+						self.tooltipText = GUPPET_L["INGAMEBUTTONS_MOVE"][1]
+						self.tooltipRequirement = GUPPET_L["INGAMEBUTTONS_MOVE"][2]
+					</OnLoad>
+					 <OnClick>
+						GupPet_Interface_DragIngameButtons( "Hide" )
+						GUPPET_OPTIONS["IngameButton"]["Lock"] = true
+						GUPPET_INTERFACE_OPTIONFRAME.UIDrag:SetChecked(  GUPPET_OPTIONS["IngameButton"]["Lock"] )
+					</OnClick>
+					<OnEnter>
+						if ( self.tooltipText ) then
+							GameTooltip:SetOwner(self, self.tooltipOwnerPoint or "ANCHOR_RIGHT")
+							GameTooltip:SetText(self.tooltipText, nil, nil, nil, nil, true)
+						end
+						if ( self.tooltipRequirement ) then
+							GameTooltip:AddLine(self.tooltipRequirement, 1.0, 1.0, 1.0, true)
+							GameTooltip:Show()
+						end
+					</OnEnter>
+					<OnLeave>
+						GameTooltip:Hide()
+					</OnLeave>
+				</Scripts>
+ 			</Button>
+		</Frames>
+	</Frame>
+</Ui>
